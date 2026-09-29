@@ -112,11 +112,11 @@
     <!-- ==================== TAB 1: ADMIN DASHBOARD ==================== -->
     <div id="tab-admin" class="space-y-8">
       
-      <!-- Top Header & Açãos -->
+      <!-- Top Header & Ações -->
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-white">Controle Logístico</h1>
-          <p class="text-sm text-neutral-400 mt-1">Rastreamento em tempo real, estoques de depósitos e exceções administrativas.</p>
+          <p class="text-sm text-neutral-400 mt-1">Rastreamento em tempo real, estoques de depósitos e ajustes manuais.</p>
         </div>
         <div class="flex items-center gap-3">
           <button onclick="openModal('create-package-modal')" class="inline-flex items-center gap-2 rounded-full bg-white text-neutral-900 px-5 py-2.5 text-xs font-semibold hover:bg-neutral-200 transition-colors shadow-lg">
@@ -137,7 +137,7 @@
             <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 shadow-inner">👋</div>
             <h2 class="text-lg font-semibold text-white tracking-tight">Início Rápido: Simulação do Ciclo Principal</h2>
           </div>
-          <p class="text-sm text-blue-200/70 mb-5 max-w-2xl leading-relaxed">Este ambiente demonstra um motor de estado logístico em tempo real. Para ver o fluxo de dados pelo sistema, siga este ciclo de 3 passos:</p>
+          <p class="text-sm text-blue-200/70 mb-5 max-w-2xl leading-relaxed">Este ambiente demonstra um sistema de rastreamento em tempo real. Para ver o fluxo de dados pelo sistema, siga este ciclo de 3 passos:</p>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="bg-[#0a0a0c]/80 backdrop-blur-sm border border-white/5 p-4 rounded-xl flex items-start gap-3 shadow-inner">
               <div class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0 border border-blue-500/20">1</div>
@@ -316,7 +316,7 @@
               <h2 class="text-xl font-semibold text-white mt-0.5">Leitor QR de Armazém e Controle de Leitura</h2>
             </div>
             <div class="flex items-center gap-2">
-              <label for="current-operator-depot" class="text-xs text-neutral-400">Active Depósito:</label>
+              <label for="current-operator-depot" class="text-xs text-neutral-400">Depósito Ativo:</label>
               <select id="current-operator-depot" onchange="updateScannerUI()" class="bg-white/[0.05] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option class="bg-neutral-900 text-white" value="depot_1">Depósito 01 (Origem)</option>
                 <option class="bg-neutral-900 text-white" value="depot_2">Depósito 02 (Trânsito)</option>
@@ -336,7 +336,7 @@
               <div class="absolute inset-0 rounded-2xl animate-pulse bg-blue-500/10"></div>
               <div class="relative z-10 w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mb-3 text-xl">📷</div>
               <h3 class="relative z-10 text-sm font-medium text-white">Câmera Leitora Pronta</h3>
-              <p class="relative z-10 text-[11px] text-blue-200/60 max-w-[200px] mx-auto mt-2 leading-relaxed">Posicione o código QR na área pontilhada para escaneamento.</p>
+              <p class="relative z-10 text-[11px] text-blue-100/80 max-w-[200px] mx-auto mt-2 leading-relaxed">Posicione o código QR na área pontilhada para escaneamento.</p>
             </div>
 
             <!-- Quick Scan Buttons -->
@@ -348,8 +348,8 @@
             
             <!-- Manual QR Input -->
             <div class="flex flex-col sm:flex-row gap-2 mt-2 pt-6 border-t border-white/5 w-full max-w-md mx-auto text-left">
-              <input type="text" id="manual-qr-input" onkeypress="if(event.key === 'Enter') handleScanAção()" placeholder="Inserir Código QR (ex: PKG-101)…" class="flex-1 bg-white/[0.03] border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <button onclick="handleScanAção()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap">Processar Leitura</button>
+              <input type="text" id="manual-qr-input" onkeypress="if(event.key === 'Enter') handleScanAction()" placeholder="Inserir Código QR (ex: PKG-101)…" class="flex-1 bg-white/[0.03] border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <button onclick="handleScanAction()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap">Processar Leitura</button>
             </div>
 
           </div>
@@ -365,7 +365,7 @@
 
           <!-- Depósito Specific Ação Panel -->
           <div id="depot-action-panel" class="p-5 rounded-xl bg-white/[0.02] border border-white/5 space-y-4">
-            <h4 class="text-xs font-mono uppercase tracking-wider text-neutral-400" id="depot-panel-title">Depósito 01 Açãos</h4>
+            <h4 class="text-xs font-mono uppercase tracking-wider text-neutral-400" id="depot-panel-title">Depósito 01 Ações</h4>
             <div id="depot-panel-content">
               <!-- Dynamic based on selected depot -->
             </div>
@@ -409,10 +409,10 @@
     <div class="double-bezel-outer max-w-md w-full">
       <div class="double-bezel-inner p-6 space-y-6 bg-[#0a0a0c]">
         <div class="flex items-center justify-between pb-3 border-b border-white/5">
-          <h3 class="text-base font-semibold text-white">Create New Package (Depósito 01)</h3>
+          <h3 class="text-base font-semibold text-white">Criar Novo Pacote (Depósito 01)</h3>
           <button onclick="closeModal('create-package-modal')" class="text-neutral-400 hover:text-white text-sm" aria-label="Close modal">&times;</button>
         </div>
-        <form onsubmit="event.preventDefault(); confirmAdminDelete();">
+        <form onsubmit="event.preventDefault(); submitCreatePackage();">
         <div class="space-y-4 text-xs">
           <div>
             <label class="block text-neutral-400 mb-1.5 font-medium">Selecionar SKU do Produto</label>
@@ -443,7 +443,7 @@
     <div class="double-bezel-outer max-w-md w-full">
       <div class="double-bezel-inner p-6 space-y-6 bg-[#0a0a0c]">
         <div class="flex items-center justify-between pb-3 border-b border-white/5">
-          <h3 class="text-base font-semibold text-white">Manual Stock Adjustment (Depósito 05)</h3>
+          <h3 class="text-base font-semibold text-white">Ajuste Manual de Estoque (Depósito 05)</h3>
           <button onclick="closeModal('manual-stock-modal')" class="text-neutral-400 hover:text-white text-sm" aria-label="Close modal">&times;</button>
         </div>
         <div class="space-y-4 text-xs">
@@ -743,7 +743,7 @@
               <div class="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl shadow-inner">📦</div>
               <div class="text-center space-y-1">
                 <h4 class="text-sm font-semibold text-white">Nenhum pacote ativo</h4>
-                <p class="text-xs text-neutral-400 max-w-sm">The tracking system is completely empty. Create a package from Depósito 01 to begin the logistics simulation.</p>
+                <p class="text-xs text-neutral-400 max-w-sm">O sistema de rastreamento está completamente vazio. Crie um pacote no Depósito 01 para iniciar a simulação logística.</p>
               </div>
               <button onclick="openModal('create-package-modal')" class="mt-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg text-xs font-medium transition-colors shadow-lg shadow-blue-900/20">Criar Primeiro Pacote</button>
             </div>
@@ -933,13 +933,13 @@
       if (db.packages.length === 0) {
         quickBtns.innerHTML = `
           <div class="w-full mt-2 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[11px] text-blue-300">
-            <strong>Nenhum pacote ativo to scan.</strong> Create a package from the Painel Administrativo first.
+            <strong>Nenhum pacote ativo para leitura.</strong> Crie um pacote a partir do Painel Administrativo primeiro.
           </div>
         `;
       } else {
         db.packages.forEach(p => {
           quickBtns.innerHTML += `
-            <button onclick="document.getElementById('manual-qr-input').value='${p.code}'; handleScanAção();" class="text-xs font-mono bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1.5 rounded-lg text-white transition-colors">
+            <button onclick="document.getElementById('manual-qr-input').value='${p.code}'; handleScanAction();" class="text-xs font-mono bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1.5 rounded-lg text-white transition-colors">
               Scan ${p.code} (${p.status})
             </button>
           `;
@@ -949,23 +949,23 @@
       if (depot === 'depot_1') {
         titleEl.innerText = 'Depósito 01: Consolidação e Expedição';
         contentEl.innerHTML = `
-          <p class="text-xs text-neutral-300 mb-3">At Depósito 01, operators create shipping batches. Click below to open the creation modal.</p>
-          <button onclick="openModal('create-package-modal')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-xs font-medium">Create New Package (Depósito 01)</button>
+          <p class="text-xs text-neutral-300 mb-3">No Depósito 01, os operadores criam lotes de envio. Clique abaixo para abrir o modal de criação.</p>
+          <button onclick="openModal('create-package-modal')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-xs font-medium">Criar Novo Pacote (Depósito 01)</button>
         `;
       } else if (depot === 'depot_2' || depot === 'depot_3' || depot === 'depot_4') {
         titleEl.innerText = `${depot.replace('_', ' ').toUpperCase()} (Ponto de Trânsito)`;
         contentEl.innerHTML = `
-          <p class="text-xs text-neutral-300 mb-2">Scan any incoming package QR code to register receipt at this transit hub and update tracking location.</p>
+          <p class="text-xs text-neutral-300 mb-2">Escaneie o código QR de qualquer pacote recebido para registrar a entrada neste ponto de trânsito e atualizar a localização de rastreamento.</p>
         `;
       } else if (depot === 'depot_5') {
         titleEl.innerText = 'Depósito 05 (Disassembly / Final Destino)';
         contentEl.innerHTML = `
-          <p class="text-xs text-neutral-300 mb-2">Scanning a package here will prompt disassembly. Once confirmed, items are automatically added to Depósito 05 unit stock.</p>
+          <p class="text-xs text-neutral-300 mb-2">Escanear um pacote aqui solicitará sua desmontagem. Uma vez confirmado, os itens são adicionados automaticamente ao estoque unitário do Depósito 05.</p>
         `;
       }
     }
 
-    function handleScanAção() {
+    function handleScanAction() {
       const code = document.getElementById('manual-qr-input').value.trim().toUpperCase();
       const depot = document.getElementById('current-operator-depot').value;
       const feedback = document.getElementById('scanner-feedback');
