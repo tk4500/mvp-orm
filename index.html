@@ -269,7 +269,7 @@
                   <th class="pb-3 font-medium">Depósito Atual</th>
                   <th class="pb-3 font-medium hidden md:table-cell">Resumo de Itens</th>
                   <th class="pb-3 font-medium hidden md:table-cell">Última Atualização</th>
-                  <th class="pb-3 font-medium text-right">Ações (Exceção Admin)</th>
+                  <th class="pb-3 font-medium text-right">Ações (Ajuste Manual)</th>
                 </tr>
               </thead>
               <tbody id="packages-table-body" class="divide-y divide-white/5 text-neutral-300">
@@ -313,42 +313,46 @@
           <div class="flex items-center justify-between pb-4 border-b border-white/5">
             <div>
               <span class="text-xs font-mono text-blue-400 uppercase tracking-wider">Terminal Android de Campo</span>
-              <h2 class="text-xl font-semibold text-white mt-0.5">Leitor QR de Armazém e Motor de Estado</h2>
+              <h2 class="text-xl font-semibold text-white mt-0.5">Leitor QR de Armazém e Controle de Leitura</h2>
             </div>
             <div class="flex items-center gap-2">
               <label for="current-operator-depot" class="text-xs text-neutral-400">Active Depósito:</label>
               <select id="current-operator-depot" onchange="updateScannerUI()" class="bg-white/[0.05] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="depot_1">Depósito 01 (Origem)</option>
-                <option value="depot_2">Depósito 02 (Trânsito)</option>
-                <option value="depot_3">Depósito 03 (Trânsito)</option>
-                <option value="depot_4">Depósito 04 (Trânsito)</option>
-                <option value="depot_5">Depósito 05 (Destino)</option>
+                <option class="bg-neutral-900 text-white" value="depot_1">Depósito 01 (Origem)</option>
+                <option class="bg-neutral-900 text-white" value="depot_2">Depósito 02 (Trânsito)</option>
+                <option class="bg-neutral-900 text-white" value="depot_3">Depósito 03 (Trânsito)</option>
+                <option class="bg-neutral-900 text-white" value="depot_4">Depósito 04 (Trânsito)</option>
+                <option class="bg-neutral-900 text-white" value="depot_5">Depósito 05 (Destino)</option>
               </select>
             </div>
           </div>
 
           <!-- Scanner Simulation View -->
           <div class="space-y-4">
-            <div class="bg-black/60 border border-white/10 rounded-xl p-6 text-center space-y-4 relative overflow-hidden">
-              <div class="absolute inset-0 bg-blue-500/5 pointer-events-none flex items-center justify-center">
-                <div class="w-48 h-48 border border-dashed border-blue-500/30 rounded-xl animate-pulse"></div>
-              </div>
-              <div class="relative z-10">
-                <div class="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-3 text-xl">📷</div>
-                <h3 class="text-sm font-medium text-white">Câmera Leitora Pronta</h3>
-                <p class="text-xs text-neutral-400 max-w-sm mx-auto mt-1">Selecione um código QR ativo abaixo ou insira o código de rastreio manualmente para simular a leitura em campo.</p>
-              </div>
+            <div class="bg-black/60 border border-white/10 rounded-xl p-6 text-center flex flex-col items-center space-y-6">
+            
+            <!-- Viewfinder Box (containing the text) -->
+            <div class="relative w-full max-w-xs aspect-square border-2 border-dashed border-blue-500/40 rounded-2xl bg-blue-500/5 flex flex-col items-center justify-center p-6 mx-auto">
+              <div class="absolute inset-0 rounded-2xl animate-pulse bg-blue-500/10"></div>
+              <div class="relative z-10 w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mb-3 text-xl">📷</div>
+              <h3 class="relative z-10 text-sm font-medium text-white">Câmera Leitora Pronta</h3>
+              <p class="relative z-10 text-[11px] text-blue-200/60 max-w-[200px] mx-auto mt-2 leading-relaxed">Posicione o código QR na área pontilhada para escaneamento.</p>
+            </div>
 
-              <div class="relative z-10 flex flex-wrap items-center justify-center gap-2 pt-2" id="quick-scan-buttons">
+            <!-- Quick Scan Buttons -->
+            <div class="w-full max-w-md mx-auto">
+              <div class="flex flex-wrap items-center justify-center gap-2" id="quick-scan-buttons">
                 <!-- Dynamic QR buttons -->
               </div>
             </div>
-
+            
             <!-- Manual QR Input -->
-            <div class="flex gap-2">
-              <input type="text" id="manual-qr-input" placeholder="Inserir Código QR (ex: PKG-101)…" class="flex-1 bg-white/[0.03] border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <button onclick="handleScanAção()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg text-xs font-medium transition-colors">Processar Leitura</button>
+            <div class="flex flex-col sm:flex-row gap-2 mt-2 pt-6 border-t border-white/5 w-full max-w-md mx-auto text-left">
+              <input type="text" id="manual-qr-input" onkeypress="if(event.key === 'Enter') handleScanAção()" placeholder="Inserir Código QR (ex: PKG-101)…" class="flex-1 bg-white/[0.03] border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <button onclick="handleScanAção()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap">Processar Leitura</button>
             </div>
+
+          </div>
           </div>
 
           <!-- Scanner Ação Feedback / Result Box -->
@@ -408,14 +412,15 @@
           <h3 class="text-base font-semibold text-white">Create New Package (Depósito 01)</h3>
           <button onclick="closeModal('create-package-modal')" class="text-neutral-400 hover:text-white text-sm" aria-label="Close modal">&times;</button>
         </div>
+        <form onsubmit="event.preventDefault(); confirmAdminDelete();">
         <div class="space-y-4 text-xs">
           <div>
             <label class="block text-neutral-400 mb-1.5 font-medium">Selecionar SKU do Produto</label>
             <select id="new-pkg-sku" class="w-full bg-white/[0.05] border border-white/10 rounded-lg p-2.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="SKU-STARLINK-MINI">Starlink Mini (Antenna)</option>
-              <option value="SKU-MOUNT-MAG">Magnetic Mount Bracket</option>
-              <option value="SKU-CABLE-ETH">Ethernet Rugged Cable 15m</option>
-              <option value="SKU-POWER-DC">DC Power Supply 12V</option>
+              <option class="bg-neutral-900 text-white" value="SKU-STARLINK-MINI">Starlink Mini (Antenna)</option>
+              <option class="bg-neutral-900 text-white" value="SKU-MOUNT-MAG">Magnetic Mount Bracket</option>
+              <option class="bg-neutral-900 text-white" value="SKU-CABLE-ETH">Ethernet Rugged Cable 15m</option>
+              <option class="bg-neutral-900 text-white" value="SKU-POWER-DC">DC Power Supply 12V</option>
             </select>
           </div>
           <div>
@@ -428,6 +433,7 @@
           <button onclick="closeModal('create-package-modal')" class="px-4 py-2 rounded-lg bg-white/5 text-neutral-300 hover:bg-white/10 text-xs">Cancelar</button>
           <button onclick="submitCreatePackage()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs">Consolidar e Enviar</button>
         </div>
+        </form>
       </div>
     </div>
   </div>
@@ -444,10 +450,10 @@
           <div>
             <label class="block text-neutral-400 mb-1.5 font-medium">SKU do Produto</label>
             <select id="adj-sku" class="w-full bg-white/[0.05] border border-white/10 rounded-lg p-2.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="SKU-STARLINK-MINI">Starlink Mini (Antenna)</option>
-              <option value="SKU-MOUNT-MAG">Magnetic Mount Bracket</option>
-              <option value="SKU-CABLE-ETH">Ethernet Rugged Cable 15m</option>
-              <option value="SKU-POWER-DC">DC Power Supply 12V</option>
+              <option class="bg-neutral-900 text-white" value="SKU-STARLINK-MINI">Starlink Mini (Antenna)</option>
+              <option class="bg-neutral-900 text-white" value="SKU-MOUNT-MAG">Magnetic Mount Bracket</option>
+              <option class="bg-neutral-900 text-white" value="SKU-CABLE-ETH">Ethernet Rugged Cable 15m</option>
+              <option class="bg-neutral-900 text-white" value="SKU-POWER-DC">DC Power Supply 12V</option>
             </select>
           </div>
           <div>
@@ -469,19 +475,19 @@
     <div class="double-bezel-outer max-w-md w-full">
       <div class="double-bezel-inner p-6 space-y-6 bg-[#0a0a0c]">
         <div class="flex items-center justify-between pb-3 border-b border-white/5">
-          <h3 class="text-base font-semibold text-red-400">Exceção Admin: Excluir / Danificar Pacote</h3>
+          <h3 class="text-base font-semibold text-red-400">Ajuste Manual: Baixa por Perda / Dano</h3>
           <button onclick="closeModal('admin-delete-modal')" class="text-neutral-400 hover:text-white text-sm" aria-label="Close modal">&times;</button>
         </div>
         <div class="space-y-4 text-xs">
-          <p class="text-neutral-300">Você está prestes a marcar o pacote <span id="del-pkg-code" class="font-mono font-semibold text-white">PKG-000</span> como extraviado/danificado (Exceção Admin). Isso gera um log de auditoria imutável.</p>
+          <p class="text-neutral-300">Você está prestes a marcar o pacote <span id="del-pkg-code" class="font-mono font-semibold text-white">PKG-000</span> como extraviado ou danificado. Isso gera um log de auditoria imutável.</p>
           <div>
             <label class="block text-neutral-400 mb-1.5 font-medium">Senha / PIN de Admin Necessário</label>
-            <input type="password" id="admin-pin" placeholder="Inserir senha de admin…" class="w-full bg-white/[0.05] border border-white/10 rounded-lg p-2.5 text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+            <input type="password" id="admin-pin" autocomplete="current-password" placeholder="Inserir senha de admin…" class="w-full bg-white/[0.05] border border-white/10 rounded-lg p-2.5 text-white focus:outline-none focus:ring-2 focus:ring-red-500">
           </div>
         </div>
         <div class="flex justify-end gap-3 pt-2">
           <button onclick="closeModal('admin-delete-modal')" class="px-4 py-2 rounded-lg bg-white/5 text-neutral-300 hover:bg-white/10 text-xs">Cancelar</button>
-          <button onclick="confirmAdminDelete()" class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-medium text-xs">Confirmar Exceção</button>
+          <button onclick="confirmAdminDelete()" class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-medium text-xs">Confirmar Baixa</button>
         </div>
       </div>
     </div>
@@ -489,7 +495,7 @@
 
 
   <!-- Custom Toast Notification Container -->
-  <div id="toast-container" class="fixed bottom-4 right-4 z-[60] flex flex-col gap-2 pointer-events-none"></div>
+  <div id="toast-container" class="fixed bottom-4 right-4 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- Custom Confirm Modal -->
   <div id="app-confirm-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
@@ -905,14 +911,14 @@
             timestamp: new Date().toISOString(),
             packageCode: packageToDelete,
             depot: pkg.depotId,
-            user: 'Exceção Admin',
-            action: 'EXCLUSAO_ADMIN (Exceção tratada)'
+            user: 'Administrador (Manual)',
+            action: 'BAIXA_MANUAL (Perda/Dano)'
           });
         }
 
         closeModal('admin-delete-modal');
         saveDB();
-        showToast(`Pacote ${packageToDelete} excluído via Exceção Admin.`, 'success');
+        showToast(`Pacote ${packageToDelete} removido via Ajuste Manual.`, 'success');
       }, 500);
     }
 
@@ -1092,7 +1098,7 @@
 
         saveDB();
         showToast(`Pedido ${ordId} entregue e registrado com sucesso!`, 'success');
-      }
+      });
     }
 
     // Initialize on load
