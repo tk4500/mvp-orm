@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusORM & ERP — Enterprise Database & Operations Engine</title>
+  <!-- Google Fonts: Geist & Geist Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #ffffff;
+      --color-text: #171717;
+      --color-text-muted: #4d4d4d;
+      --color-text-subtle: #666666;
+      --color-border: rgba(0, 0, 0, 0.08);
+      --color-border-light: #ebebeb;
+      --color-surface-subtle: #fafafa;
+      --color-primary: #171717;
+      --color-primary-hover: #000000;
+      
+      /* Workflow Accent Colors */
+      --develop-text: #0a72ef;
+      --preview-text: #de1d8d;
+      --ship-text: #ff5b4f;
+      
+      /* Console Colors */
+      --console-blue: #0070f3;
+      --console-purple: #7928ca;
+      --console-pink: #eb367f;
+      --link-blue: #0072f5;
+      --focus-color: hsla(212, 100%, 48%, 1);
+      
+      /* Shadow Stacks */
+      --shadow-ring: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+      --shadow-card: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 2px rgba(0,0,0,0.04), #fafafa 0px 0px 0px 1px;
+      --shadow-card-hover: 0px 0px 0px 1px rgba(0,0,0,0.12), 0px 4px 12px rgba(0,0,0,0.06), #fafafa 0px 0px 0px 1px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      color: var(--color-text);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      font-feature-settings: "liga" on, "tnum" on;
+      line-height: 1.5;
+    }
+
+    /* Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-ring);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--color-text);
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: -0.48px;
+    }
+
+    .logo-icon {
+      width: 24px;
+      height: 24px;
+      background: #171717;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--color-text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 6px;
+      padding: 6px 14px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-ghost {
+      background: #ffffff;
+      color: var(--color-text);
+      box-shadow: 0px 0px 0px 1px #ebebeb;
+    }
+
+    .btn-ghost:hover {
+      background: var(--color-surface-subtle);
+      box-shadow: 0px 0px 0px 1px #d4d4d4;
+    }
+
+    .btn-dark {
+      background: #171717;
+      color: #ffffff;
+      box-shadow: 0px 0px 0px 1px #171717;
+    }
+
+    .btn-dark:hover {
+      background: #000000;
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1100px;
+      margin: 96px auto 64px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ebf5ff;
+      color: #0068d6;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 12px;
+      border-radius: 9999px;
+      margin-bottom: 24px;
+      box-shadow: 0px 0px 0px 1px rgba(0, 104, 214, 0.15);
+    }
+
+    .pill-badge span {
+      background: #0068d6;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1px 6px;
+      border-radius: 9999px;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -2.4px;
+      color: var(--color-text);
+      margin-bottom: 24px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero p {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--color-text-muted);
+      max-width: 700px;
+      margin: 0 auto 36px auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 56px;
+    }
+
+    .hero-actions .btn {
+      padding: 10px 20px;
+      font-size: 15px;
+    }
+
+    /* Hero Code Preview Window */
+    .hero-preview {
+      max-width: 960px;
+      margin: 0 auto 96px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      text-align: left;
+      border: 1px solid var(--color-border-light);
+    }
+
+    .preview-header {
+      background: var(--color-surface-subtle);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .preview-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d4d4d4;
+    }
+    .dot:nth-child(1) { background: #ff5b4f; }
+    .dot:nth-child(2) { background: #f5a623; }
+    .dot:nth-child(3) { background: #52c41a; }
+
+    .preview-title {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    .code-container {
+      padding: 24px;
+      background: #ffffff;
+      font-family: 'Geist Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--color-text);
+      overflow-x: auto;
+    }
+
+    .keyword { color: var(--console-purple); }
+    .type { color: var(--console-blue); }
+    .string { color: #00a854; }
+    .comment { color: #8c8c8c; font-style: italic; }
+    .property { color: var(--console-pink); }
+
+    /* Workflow Pipeline Section */
+    .pipeline-section {
+      max-width: 1200px;
+      margin: 0 auto 120px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+
+    .section-header {
+      margin-bottom: 64px;
+    }
+
+    .section-header h2 {
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -2.0px;
+      margin-bottom: 16px;
+    }
+
+    .section-header p {
+      font-size: 18px;
+      color: var(--color-text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      text-align: left;
+    }
+
+    .pipeline-card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+
+    .pipeline-step-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .step-develop { color: var(--develop-text); }
+    .step-preview { color: var(--preview-text); }
+    .step-ship { color: var(--ship-text); }
+
+    .pipeline-card h3 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.96px;
+      margin-bottom: 12px;
+    }
+
+    .pipeline-card p {
+      font-size: 15px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* Core Modules Grid (ERP & ORM) */
+    .modules-section {
+      max-width: 1200px;
+      margin: 0 auto 120px auto;
+      padding: 0 24px;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .module-card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .module-card:hover {
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .module-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--color-surface-subtle);
+      box-shadow: var(--shadow-ring);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .module-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      margin-bottom: 10px;
+    }
+
+    .module-card p {
+      font-size: 15px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* Trust / Metrics Banner */
+    .metrics-banner {
+      border-top: 1px solid var(--color-border-light);
+      border-bottom: 1px solid var(--color-border-light);
+      background: var(--color-surface-subtle);
+      padding: 80px 24px;
+      margin-bottom: 120px;
+      text-align: center;
+    }
+
+    .metrics-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .metric-item h4 {
+      font-size: 48px;
+      font-weight: 600;
+      letter-spacing: -2.4px;
+      margin-bottom: 8px;
+    }
+
+    .metric-item p {
+      font-size: 15px;
+      color: var(--color-text-muted);
+    }
+
+    /* CTA Section */
+    .cta-banner {
+      max-width: 1000px;
+      margin: 0 auto 120px auto;
+      padding: 64px 24px;
+      background: #171717;
+      color: #ffffff;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .cta-banner h2 {
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -2.0px;
+      margin-bottom: 16px;
+    }
+
+    .cta-banner p {
+      font-size: 18px;
+      color: #a3a3a3;
+      max-width: 600px;
+      margin: 0 auto 32px auto;
+    }
+
+    .cta-banner .btn-dark {
+      background: #ffffff;
+      color: #171717;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: none;
+    }
+
+    .cta-banner .btn-dark:hover {
+      background: #e5e5e5;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--color-border-light);
+      padding: 64px 32px;
+      background: #ffffff;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 48px;
+    }
+
+    .footer-col h5 {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 16px;
+      color: var(--color-text);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: var(--color-text-muted);
+      font-size: 14px;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-text);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 48px auto 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--color-border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--color-text-subtle);
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #52c41a;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(82, 196, 26, 0.15);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .pipeline-grid, .modules-grid, .metrics-container {
+        grid-template-columns: 1fr;
+      }
+      .footer-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      h1 {
+        font-size: 36px;
+        letter-spacing: -1.5px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="nav-left">
+      <a href="#" class="logo">
+        <div class="logo-icon">N</div>
+        NexusORM
+      </a>
+      <ul class="nav-links">
+        <li><a href="#pipeline">Pipeline</a></li>
+        <li><a href="#modules">ERP Modules</a></li>
+        <li><a href="#schema">Schema & Migrations</a></li>
+        <li><a href="#enterprise">Enterprise</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <a href="#" class="btn btn-ghost">Sign In</a>
+      <a href="#" class="btn btn-dark">Start Deploying</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="pill-badge">
+      <span>v3.8</span> Enterprise ORM & ERP Engine released
+    </div>
+    <h1>Enterprise Database Operations, compiled for zero latency.</h1>
+    <p>The high-performance object-relational mapper and modular ERP ledger designed for mission-critical enterprise workloads. Instant ACID transactions, zero-downtime migrations.</p>
+    
+    <div class="hero-actions">
+      <a href="#" class="btn btn-dark">Start Building — Free</a>
+      <a href="#" class="btn btn-ghost">Documentation &rarr;</a>
+    </div>
+
+    <!-- Code Preview Card -->
+    <div class="hero-preview">
+      <div class="preview-header">
+        <div class="preview-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <div class="preview-title">schema.nexus.ts — Enterprise Order & Inventory Model</div>
+        <div style="width: 40px;"></div>
+      </div>
+      <div class="code-container">
+        <span class="keyword">import</span> { model, field, relation, erpModule } @<span class="type">nexus/orm</span>;<br><br>
+        <span class="comment">// Define multi-tenant ERP Ledger with automated ACID constraints</span><br>
+        @<span class="type">erpModule</span>({ name: <span class="string">"SupplyChain & Ledger"</span> })<br>
+        <span class="keyword">export class</span> <span class="type">EnterpriseOrder</span> <span class="keyword">extends</span> Model &#123;<br>
+        &nbsp;&nbsp;@<span class="property">field</span>({ type: <span class="type">UUID</span>, primary: <span class="keyword">true</span>, default: <span class="string">sql`gen_random_uuid()`</span> })<br>
+        &nbsp;&nbsp;<span class="property">id</span>!: string;<br><br>
+        &nbsp;&nbsp;@<span class="property">field</span>({ type: <span class="type">VarChar</span>(128), index: <span class="keyword">true</span> })<br>
+        &nbsp;&nbsp;<span class="property">orderNumber</span>!: string;<br><br>
+        &nbsp;&nbsp;@<span class="property">relation</span>({ model: <span class="type">Customer</span>, onDelete: <span class="string">"RESTRICT"</span> })<br>
+        &nbsp;&nbsp;<span class="property">customer</span>!: <span class="type">Customer</span>;<br><br>
+        &nbsp;&nbsp;@<span class="property">field</span>({ type: <span class="type">Decimal</span>(12, 4), precision: 4, auditLog: <span class="keyword">true</span> })<br>
+        &nbsp;&nbsp;<span class="property">totalAmount</span>!: number;<br>
+        &#125;
+      </div>
+    </div>
+  </section>
+
+  <!-- Workflow Pipeline Section -->
+  <section class="pipeline-section" id="pipeline">
+    <div class="section-header">
+      <span class="pipeline-step-label step-develop">Architectural Pipeline</span>
+      <h2>From Schema to Production ERP Ledger.</h2>
+      <p>NexusORM bridges type-safe database design with robust business workflows through a unified deployment pipeline.</p>
+    </div>
+
+    <div class="pipeline-grid">
+      <div class="pipeline-card">
+        <div class="pipeline-step-label step-develop">01. Develop</div>
+        <h3>Type-Safe Models</h3>
+        <p>Write expressive TypeScript models with intelligent autocomplete, automated relationship resolution, and compile-time validation.</p>
+      </div>
+
+      <div class="pipeline-card">
+        <div class="pipeline-step-label step-preview">02. Preview</div>
+        <h3>Instant Migrations</h3>
+        <p>Preview schema diffs instantly in isolated ephemeral preview databases before applying zero-downtime alterations to production.</p>
+      </div>
+
+      <div class="pipeline-card">
+        <div class="pipeline-step-label step-ship">03. Ship</div>
+        <h3>ACID Scale</h3>
+        <p>Deploy directly to distributed PostgreSQL or MySQL clusters with built-in audit trails, double-entry accounting ledgers, and edge caching.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Modules Grid (ERP & ORM Features) -->
+  <section class="modules-section" id="modules">
+    <div class="section-header">
+      <span class="pipeline-step-label step-develop">Capabilities</span>
+      <h2>Engineered for Enterprise Complexity.</h2>
+      <p>Everything your engineering and finance teams need to run robust relational databases and ERP modules at scale.</p>
+    </div>
+
+    <div class="modules-grid">
+      <div class="module-card">
+        <div class="module-icon">⚡</div>
+        <h3>Zero-Latency ORM</h3>
+        <p>Blazing fast query compiler that translates TypeScript directly into optimized SQL with intelligent prefetching and connection pooling.</p>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">🔒</div>
+        <h3>Immutable Audit Logs</h3>
+        <p>Built-in cryptographic audit trails for compliance (SOC2, GDPR, HIPAA) tracking every record mutation down to the millisecond.</p>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">📊</div>
+        <h3>Modular ERP Ledger</h3>
+        <p>Pre-built modules for inventory management, double-entry general ledger, invoicing, and multi-currency tax calculations.</p>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">🔄</div>
+        <h3>Zero-Downtime Migrations</h3>
+        <p>Smart shadow-state migrations that guarantee backward compatibility during rolling schema upgrades across live clusters.</p>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">🌐</div>
+        <h3>Distributed Sharding</h3>
+        <p>Automatic horizontal sharding and multi-region read replicas with sub-millisecond replication lag for global operations.</p>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">🛠️</div>
+        <h3>GraphQL & REST APIs</h3>
+        <p>Instantly expose type-safe GraphQL endpoints and OpenAPI specifications directly from your ORM models without boilerplate.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metrics Banner -->
+  <section class="metrics-banner">
+    <div class="metrics-container">
+      <div class="metric-item">
+        <h4>10x</h4>
+        <p>Faster query execution compared to legacy ORMs</p>
+      </div>
+      <div class="metric-item">
+        <h4>99.999%</h4>
+        <p>Enterprise uptime SLA with zero-downtime deploys</p>
+      </div>
+      <div class="metric-item">
+        <h4>50ms</h4>
+        <p>Global edge replication latency across 32 regions</p>
+      </div>
+      <div class="metric-item">
+        <h4>0</h4>
+        <p>Runtime type mismatch errors in production</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="cta-banner">
+    <h2>Ready to modernize your enterprise data stack?</h2>
+    <p>Join thousands of high-growth engineering teams building robust ERP systems on NexusORM.</p>
+    <a href="#" class="btn btn-dark">Deploy Your First Schema &rarr;</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <a href="#" class="logo" style="margin-bottom: 16px; display: inline-flex;">
+          <div class="logo-icon">N</div>
+          NexusORM
+        </a>
+        <p style="font-size: 14px; color: var(--color-text-muted); max-width: 280px; line-height: 1.6;">
+          The next-generation ORM and ERP engine built for high-scale enterprise applications.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h5>Product</h5>
+        <ul class="footer-links">
+          <li><a href="#">ORM Engine</a></li>
+          <li><a href="#">ERP Modules</a></li>
+          <li><a href="#">Migrations</a></li>
+          <li><a href="#">Edge Caching</a></li>
+          <li><a href="#">Enterprise Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <ul class="footer-links">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Guides & Tutorials</a></li>
+          <li><a href="#">SQL Compatibility</a></li>
+          <li><a href="#">Changelog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul class="footer-links">
+          <li><a href="#">About Nexus</a></li>
+          <li><a href="#">Careers <span style="font-size: 10px; background: #ebf5ff; color: #0068d6; padding: 2px 6px; border-radius: 9999px; margin-left: 6px;">We're hiring</span></a></li>
+          <li><a href="#">Security & SOC2</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Contact Sales</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>&copy; 2026 NexusORM Inc. All rights reserved.</div>
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span>All Systems Operational</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
